@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block head_title %}Order Summary{% endblock %}
+{% block content %}
+  
+
+  <!--Main layout-->
+  <main>
+    <div class="container">
+
+      <!--Table-->
+<table class="table table-striped w-auto">
+
+  <!--Table head-->
+  <thead>
+    <tr>
+      <th class="th-lg">#</th>
+      <td class="th-lg">Item</td>
+      <td class="th-lg">Price</td>
+      <td class="th-lg">Quantity</td>
+      <td class="th-lg">Total price</td>
+    </tr>
+  </thead>
+  <!--Table head-->
+
+  <!--Table body-->
+  <tbody>
+    
+    {% for order in object.items.all %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ order.item.name }}</td>
+      <td>{{ order.item.price }}</td>
+      <td>
+        <a href="{% url 'main:remove-single-item-from-cart' order.item.slug %}"><i class="fas fa-minus mr-2"></i></a>
+        {{ order.quantity }}
+        <a href="{% url 'main:add-to-cart' order.item.slug %}"><i class="fas fa-plus ml-2"></i></a>
+    </td>
+      <td>{{ order.get_total_amount }}</td> 
+      <td><a class="btn btn-danger btn-sm" href="{% url 'main:remove-from-cart' order.item.slug %}">Remove</a>
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="4"><b> Final Amount : </b></td>
+      <td ><b> {{ object.get_final_amount }}</b></td>
+    </tr>
+    <tr>
+      <td colspan="5">
+      <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
+      <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+      </td>
+    </tr>
+    
+  </tbody>
+  <!--Table body-->
+
+
+</table>
+<!--Table-->
+
+      
+
+      
+
+    </div>
+  </main>
+  <!--Main layout-->
+ {% endblock %}
+
