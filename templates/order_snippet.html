@@ -35,13 +35,13 @@
     
     
     {% if DISPLAY_COUPON_FORM %}
-    <form class="card p-2" action="{% url 'main:add-coupon' %}" method="POST">
+    <form class="card p-2 " action="{% url 'main:add-coupon' %}" method="POST">
         {% csrf_token %}
         <div class="input-group">
             {{ couponform.code }}
             <div class="input-group-append">
 
-            <button class="btn btn-secondary btn-sm mt-2 waves-effect m-0" type="submit">Redeem</button>
+            <button class="btn btn-secondary btn-sm mt-2 ml-2 waves-effect m-0" type="submit">Redeem</button>
             </div>
         </div>
     </form>

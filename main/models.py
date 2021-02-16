@@ -22,18 +22,32 @@ class Address(models.Model):
     apartment_address = models.CharField(max_length=100)
     country = CountryField(multiple=False)
     zipcode = models.CharField(max_length=10)
+    use_default_shipping = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
 
-class Payment(models.Model):
-    stripe_charge_id = models.CharField(max_length=50)
-    user = models.ForeignKey( User, on_delete=models.SET_NULL,blank=True,null=True)
+class PaymentViaPaytm(models.Model):
+    order_id = models.CharField(max_length=250)
+    checksum = models.CharField(max_length=250)
+    user = models.ForeignKey( User, on_delete=models.SET_NULL,null=True)
     amount = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username
+
+
+class Payment(models.Model):
+    stripe_charge_id = models.CharField(max_length=50)
+    user = models.ForeignKey( User, on_delete=models.SET_NULL,null=True)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+    
+    
 
 
 class Item(models.Model):
@@ -44,6 +58,7 @@ class Item(models.Model):
     label = models.CharField(choices=Label_choices,max_length=1)
     description = models.TextField(default="",blank=True)
     slug = models.SlugField()
+    image = models.ImageField(upload_to='item/images',blank=True,null=True)
 
     def __str__(self):
         return self.name
@@ -55,11 +70,6 @@ class Item(models.Model):
     def get_absolute_url(self):
         return reverse('main:product-detail', kwargs={'slug': self.slug})
     
-    # def get_add_to_cart(self):
-    #     return reverse('main:add_to_cart',kwargs={ 'slug' : self.slug})
-    
-    # def get_remove_from_cart(self):
-    #     return reverse('main:remove_from_cart',kwargs={ 'slug' : self.slug})
     
 
 class OrderItem(models.Model):
@@ -94,12 +104,14 @@ class Order(models.Model):
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
     payment = models.ForeignKey( Payment, related_name='Payment',on_delete=models.SET_NULL, blank=True, null=True)
+    payment_via_paytm = models.ForeignKey( 'PaymentViaPaytm',on_delete=models.SET_NULL, blank=True, null=True)
     coupon = models.ForeignKey( 'Coupon',on_delete=models.SET_NULL, blank=True, null=True)
     refund_requested = models.BooleanField(default=False)
     refund_granted = models.BooleanField(default=False)
     received = models.BooleanField(default=False)
     being_delivered = models.BooleanField(default=False)
     ref_code = models.CharField(max_length=20,blank=True,null=True)
+
     def __str__(self):
         return self.user.username
     

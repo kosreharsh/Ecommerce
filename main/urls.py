@@ -10,6 +10,7 @@ from .views import (
     PaymentView,
     add_coupon,
     RefundView,
+    PaytmCallback,
     )
 
 app_name = 'main'
@@ -25,5 +26,6 @@ urlpatterns = [
     path('checkout/', CheckOut.as_view(),name='checkout'),
     path('add_coupon/', add_coupon ,name='add-coupon'),
     path('refund/', RefundView.as_view() ,name='refund'),
+    path('payment_confirmation/', PaytmCallback ,name='paytm-confirmation'),
 
 ]

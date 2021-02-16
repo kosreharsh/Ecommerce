@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Order, OrderItem , Item, Address , Payment, Coupon, Refund
+from .models import Order, OrderItem , Item, Address , Payment, Coupon, Refund, PaymentViaPaytm
 # Register your models here.
 
 def make_refund_accepted(modeladmin, request, queryset):
@@ -45,3 +45,4 @@ admin.site.register(Address)
 admin.site.register(Coupon)
 admin.site.register(Payment)
 admin.site.register(Refund)
+admin.site.register(PaymentViaPaytm)

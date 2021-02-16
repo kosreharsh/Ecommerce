@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+from decouple import config
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
@@ -20,10 +20,10 @@ TEMPLATE_DIR = os.path.join(BASE_DIR,"templates")
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ycf@w-q%m06#u6tzbmsn-@x@oz!2p9m-^bs06=j_s#*i=a1iwt'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'Ecommerce',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
         'PORT': '',
     }
 }
@@ -151,5 +151,11 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51IJYsjLZHhrOWPf14X9O5XyPLhcvMOrM4qnkPNFiHpSIc7ZL49tFwBrqPOyas8ItUYMkR88aTFyaAqbO5A12ILdT00o4akifqF'
-STRIPE_SECRET_KEY = 'sk_test_51IJYsjLZHhrOWPf1gpXnu2HKuHKqoi1hS21zIP9A7xiIZazDBg35Kye2ZKWqd3cBW4aBklqiclcS1iGr6Tt2fs1R00KU5yzmWI'
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+
+PAYTM_MERCHANT_ID = config('PAYTM_MERCHANT_ID')
+PAYTM_SECRET_KEY = config('PAYTM_SECRET_KEY')
+PAYTM_WEBSITE = config('PAYTM_WEBSITE')
+PAYTM_CHANNEL_ID = config('PAYTM_CHANNEL_ID')
+PAYTM_INDUSTRY_TYPE_ID = config('PAYTM_INDUSTRY_TYPE_ID')
