@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        
+        {% if object_list.empty %}
+            <h1>You have not placed an order yet !!!</h1>
+        
+        {% else %} 
+        {% for order in object_list %}
+            <a href="{{ order.get_absolute_url }}">Order ref code : {{order.ref_code}}</a>
+            
+        {% endfor %}
+        {% endif %}
+    </div>
+    
+{% endblock  %}
+    

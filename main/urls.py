@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from .views import (
     HomeView,
     ProductDetail,
@@ -11,12 +11,18 @@ from .views import (
     add_coupon,
     RefundView,
     PaytmCallback,
+    OrderListView,
+    OrderStatus,
     )
 
 app_name = 'main'
 
+
+
 urlpatterns = [
+    
     path('', HomeView.as_view(), name='home'),
+    path('myorder/',OrderListView.as_view(), name='myorderlist'),
     path('product/<slug>', ProductDetail.as_view(),name='product-detail'),
     path('add_to_cart/<slug>',add_to_cart,name='add-to-cart'),
     path('remove_from_cart/<slug>',remove_from_cart,name='remove-from-cart'),
@@ -27,5 +33,7 @@ urlpatterns = [
     path('add_coupon/', add_coupon ,name='add-coupon'),
     path('refund/', RefundView.as_view() ,name='refund'),
     path('payment_confirmation/', PaytmCallback ,name='paytm-confirmation'),
+    path('order_status/<str:ref_code>',OrderStatus.as_view(),name='orderStatus'),
+    
 
 ]

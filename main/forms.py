@@ -28,7 +28,8 @@ class CheckOutForm(forms.Form):
 class CouponForm(forms.Form):
     code = forms.CharField(widget=forms.TextInput(attrs= {
         'placeholder' : 'Enter Coupon Code',
-        'class' : 'ml-2'
+        'class' : 'ml-2',
+        'id' : 'post-val'
     }))
 
 class RefundForm(forms.Form):

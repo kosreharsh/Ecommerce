@@ -1,122 +1,121 @@
 {% extends 'base.html' %}
 {% block head_title %}Product Detail{% endblock %}
 {% block content %}
-  <!--Main layout-->
-  <main class="mt-5 pt-4">
-    <div class="container dark-grey-text mt-5">
+<!--Main layout-->
+<main class="mt-5 pt-4">
+  <div class="container dark-grey-text mt-5">
 
-      <!--Grid row-->
-      <div class="row wow fadeIn">
+    <!--Grid row-->
+    <div class="row wow fadeIn">
 
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
+      <!--Grid column-->
+      <div class="col-md-6 mb-4">
+        {% if object.image %}
+        <img src="{{ object.image.url }}" class="img-fluid" alt="Not Found">
+        {% endif %}
+      </div>
+      <!--Grid column-->
 
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt="">
+      <!--Grid column-->
+      <div class="col-md-6 mb-4">
 
-        </div>
-        <!--Grid column-->
+        <!--Content-->
+        <div class="p-1">
 
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-
-          <!--Content-->
-          <div class="p-4">
-
-            <div class="mb-3">
-              <a href="">
-                <span class="badge purple mr-1">Category 2</span>
-              </a>
-              <a href="">
-                <span class="badge blue mr-1">New</span>
-              </a>
-              <a href="">
-                <span class="badge red mr-1">Bestseller</span>
-              </a>
-            </div>
-
-            <p class="lead">
-              <span class="mr-1">
-                <del>$200</del>
+          <div class="mb-3">
+            <h1>{{ object.name }}</h1>
+            <a href="">
+              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+            </a>
+            <a href="">
+              <span class="badge badge-pill {{ object.get_label_display }}-color">
+                {% if object.get_label_display == 'primary' %}
+                Bestseller
+                {% else %}
+                NEW
+                {% endif %}
               </span>
-              <span>$100</span>
-            </p>
-
-            <p class="lead font-weight-bold">{{ item.description }}</p>
-
-            
-            <form class="d-flex justify-content-left">
-              <!-- Default input -->
-              <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
-              <a class="btn btn-primary btn-md my-0 p" href="{% url 'main:add-to-cart' slug=item.slug %}" type="submit">Add to cart
-                <i class="fas fa-shopping-cart ml-1"></i>
-              </a>
-              <a class="btn btn-danger btn-md my-0 p" href="{% url 'main:remove-from-cart' slug=item.slug %}" type="submit">Remove from cart
-                <i class="fas fa-shopping-cart ml-1"></i>
-              </a>
-
-            </form>
-
+            </a>
           </div>
-          <!--Content-->
+
+          <p class="lead">
+            {% if object.discount_price %}
+            <span class="mr-1">
+              <del>{{ object.price }}</del>
+            </span>
+            <span>{{ object.get_item_price }}</span>
+            {% else %}
+            <span>{{ object.price }}</span>
+            {% endif %}
+          </p>
+
+          <p class="lead font-weight-bold">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque tempore reprehenderit maiores eaque minus, molestias ipsum architecto deleniti ut animi illo atque qui labore non beatae iste explicabo nesciunt quasi.</p>
+
+          <a class="btn btn-primary btn-md my-0 p" href="{% url 'main:add-to-cart' slug=object.slug %}" type="submit">Add to cart
+            <i class="fas fa-shopping-cart ml-1"></i>
+          </a>
 
         </div>
-        <!--Grid column-->
+        <!--Content-->
 
       </div>
-      <!--Grid row-->
-
-      <hr>
-
-      <!--Grid row-->
-      <div class="row d-flex justify-content-center wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-md-6 text-center">
-
-          <h4 class="my-4 h4">Additional information</h4>
-
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
-            voluptates,
-            quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
-
-        </div>
-        <!--Grid column-->
-
-      </div>
-      <!--Grid row-->
-
-      <!--Grid row-->
-      <div class="row wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-12 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-      </div>
-      <!--Grid row-->
+      <!--Grid column-->
 
     </div>
-  </main>
-  <!--Main layout-->
+    <!--Grid row-->
+
+    <hr>
+
+    <!--Grid row-->
+    <div class="row d-flex justify-content-center wow fadeIn">
+
+      <!--Grid column-->
+      <div class="col-md-6 text-center">
+
+        <h4 class="my-4 h4">Additional information</h4>
+
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
+          voluptates,
+          quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
+
+      </div>
+      <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+    <!--Grid row-->
+    <div class="row wow fadeIn">
+
+      <!--Grid column-->
+      <div class="col-lg-4 col-md-12 mb-4">
+
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">
+
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-4 col-md-6 mb-4">
+
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">
+
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-4 col-md-6 mb-4">
+
+        <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">
+
+      </div>
+      <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+  </div>
+</main>
+<!--Main layout-->
 
 {% endblock %}

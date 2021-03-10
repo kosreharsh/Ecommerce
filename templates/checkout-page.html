@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load staticfiles%}
 {% block head_title %}
 CheckOut
 {% endblock %}
 
 {% block extra_head %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{% endblock  %}
-  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock %}
+
 
 {% block content %}
 
@@ -14,6 +15,12 @@ CheckOut
 <!--Main layout-->
 <main class="mt-5 ">
   <div class="container wow fadeIn">
+
+    
+      <div class="alert" id="coupon-status" role="alert">
+      </div>
+      
+    
 
     <!-- Heading -->
     <h2 class="my-5 h2 text-center">Checkout form</h2>
@@ -66,10 +73,10 @@ CheckOut
                   </div>
                 </div>
               </div>
-              
-              
-                
-              
+
+
+
+
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" name="set_default_shipping"
                   id="set_default_shipping">
@@ -78,11 +85,13 @@ CheckOut
 
             </div>
             {% if default_address %}
-              <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="use_default_shipping" id="use_default_shipping" onchange="hidediv();">
-                <label class="custom-control-label" for="use_default_shipping">Use default shipping address - {{ shipping_address.street_address|truncatechars:10  }}</label>
-              </div>
-              {% endif %}
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" name="use_default_shipping" id="use_default_shipping"
+                onchange="hidediv();">
+              <label class="custom-control-label" for="use_default_shipping">Use default shipping address - 
+                {{shipping_address.street_address|truncatechars:10 }}</label>
+            </div>
+            {% endif %}
 
             <hr>
 
@@ -121,33 +130,53 @@ CheckOut
   </div>
 </main>
 <!--Main layout-->
- 
- {% block extra_scripts %}
-   <script type="text/javascript">
-    
-    
-    var hideable_shipping_form = $('.hideable_shipping_form');
+
+{% block extra_scripts %}
+<script src="{% static "js/ajax.js" %}"></script>
+<script type="text/javascript">
+
+  var hideable_shipping_form = $('.hideable_shipping_form');
+  var use_default_shipping = document.querySelector("input[name=use_default_shipping]");
+  use_default_shipping.addEventListener('change', function () {
+    if (this.checked) {
+      hideable_shipping_form.hide();
+    } else {
+      hideable_shipping_form.show();
+    }
+  })
+  
 
 
-var use_default_shipping = document.querySelector("input[name=use_default_shipping]");
+  $('#cpost-form').on('submit', function(event) {
+    event.preventDefault();
+    console.log('form submitted');
+    add_coupon();
+  })
 
+  function add_coupon() {
+    $.ajax({
+        url: 'http://127.0.0.1:8000/add_coupon/', 
+        type: 'POST',
+        data : { code : $('#post-val').val()},
+        success: function(json) {
+          $('#post-val').val('');
+          var cAdded = document.getElementById('coupon-status');
+          cAdded.classList.add('alert-success');
+          cAdded.innerHTML = "Coupon Applied Successfully";
+          
 
-use_default_shipping.addEventListener('change', function() {
-  if (this.checked) {
-    hideable_shipping_form.hide();
-  } else {
-    hideable_shipping_form.show();
+        },
+        error: function( xhr, errmsg,err){
+          console.log("Error");
+          var cAdded = document.getElementById('coupon-status');
+          cAdded.classList.add('alert-danger');
+          cAdded.innerHTML = "Coupon Doesn't Exist";
+        }
+    })
   }
-})
 
 
+</script>
+{% endblock %}
 
-
-
-
-
-
-   </script>
- {% endblock  %}
-   
 {% endblock %}
