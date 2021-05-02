@@ -16,11 +16,11 @@ CheckOut
 <main class="mt-5 ">
   <div class="container wow fadeIn">
 
-    
-      <div class="alert" id="coupon-status" role="alert">
-      </div>
-      
-    
+
+    <div class="alert" id="coupon-status" role="alert">
+    </div>
+
+
 
     <!-- Heading -->
     <h2 class="my-5 h2 text-center">Checkout form</h2>
@@ -88,7 +88,7 @@ CheckOut
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" name="use_default_shipping" id="use_default_shipping"
                 onchange="hidediv();">
-              <label class="custom-control-label" for="use_default_shipping">Use default shipping address - 
+              <label class="custom-control-label" for="use_default_shipping">Use default shipping address -
                 {{shipping_address.street_address|truncatechars:10 }}</label>
             </div>
             {% endif %}
@@ -132,7 +132,7 @@ CheckOut
 <!--Main layout-->
 
 {% block extra_scripts %}
-<script src="{% static "js/ajax.js" %}"></script>
+<script src="{% static 'js/ajax.js' %}"></script>
 <script type="text/javascript">
 
   var hideable_shipping_form = $('.hideable_shipping_form');
@@ -144,34 +144,47 @@ CheckOut
       hideable_shipping_form.show();
     }
   })
-  
 
 
-  $('#cpost-form').on('submit', function(event) {
+
+  $('#cpost-form').on('submit', function (event) {
     event.preventDefault();
     console.log('form submitted');
     add_coupon();
   })
 
+  function updateamount(couponPrice) {
+    var famount = document.getElementById('totalamount').innerHTML;
+    famount.innerHTML = famount.innerHTML - couponPrice;
+  }
+
   function add_coupon() {
     $.ajax({
-        url: 'http://127.0.0.1:8000/add_coupon/', 
-        type: 'POST',
-        data : { code : $('#post-val').val()},
-        success: function(json) {
-          $('#post-val').val('');
-          var cAdded = document.getElementById('coupon-status');
-          cAdded.classList.add('alert-success');
-          cAdded.innerHTML = "Coupon Applied Successfully";
-          
+      url: 'http://127.0.0.1:8000/add_coupon/',
+      type: 'POST',
+      data: { code: $('#post-val').val() },
+      success: function (json) {
+        $('#post-val').val('');
+        var code = json['code'];
+        var price = Number(json['price']);
+        console.log(code);
+        var calert = document.getElementById('coupon-status');
+        var cAdded = document.getElementById('promocodehide');
+        var discoupon = document.getElementById('appliedcoupon');
+        cAdded.style.removeProperty("display");
+        calert.innerHTML = "Coupon Applied Successfully";
+        calert.classList.add("alert-success")
+        discoupon.innerHTML = String(code);
+        updateamount(price);
 
-        },
-        error: function( xhr, errmsg,err){
-          console.log("Error");
-          var cAdded = document.getElementById('coupon-status');
-          cAdded.classList.add('alert-danger');
-          cAdded.innerHTML = "Coupon Doesn't Exist";
-        }
+
+      },
+      error: function (xhr, errmsg, err) {
+        console.log("Error");
+        var cAdded = document.getElementById('coupon-status');
+        cAdded.classList.add('alert-danger');
+        cAdded.innerHTML = "Coupon Doesn't Exist";
+      }
     })
   }
 

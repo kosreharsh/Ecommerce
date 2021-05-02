@@ -1,18 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div>
-        
-        {% if object_list.empty %}
-            <h1>You have not placed an order yet !!!</h1>
-        
-        {% else %} 
+<div class="container">
+
+    {% if object_list.empty %}
+    <h1>You have not placed an order yet !!!</h1>
+
+    {% else %}
+
+    <ul class="list-group">
         {% for order in object_list %}
-            <a href="{{ order.get_absolute_url }}">Order ref code : {{order.ref_code}}</a>
-            
+        <li class="list-group-item"> <a href="{{ order.get_absolute_url }}">Order ref code : {{order.ref_code}}</a></li>
+
         {% endfor %}
-        {% endif %}
-    </div>
-    
-{% endblock  %}
-    
+    </ul>
+
+
+
+
+
+    {% endif %}
+</div>
+
+{% endblock %}

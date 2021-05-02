@@ -82,22 +82,22 @@
               <h5>
                 <strong>
                   <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.name }}
-                    <span class="badge badge-pill {{ item.get_label_display }}-color"> 
-                    {% if item.get_label_display == 'primary'   %}
+                    <span class="badge badge-pill {{ item.get_label_display }}-color">
+                      {% if item.get_label_display == 'primary' %}
                       Bestseller
-                    {% else %}
-                      NEW  
-                    {% endif %}
-                      </span>
+                      {% else %}
+                      NEW
+                      {% endif %}
+                    </span>
                   </a>
                 </strong>
               </h5>
 
               <h4 class="font-weight-bold blue-text">
                 <strong>$
-                  
+
                   {{ item.get_item_price }}
-                  
+
                 </strong>
               </h4>
 
