@@ -21,6 +21,7 @@ def create_ref(k):
 Category_choices = (("S", "Shirt"), ("SW", "Sportwear"), ("OW", "Outwear"))
 
 Label_choices = (("P", "primary"), ("S", "secondary"), ("D", "danger"))
+
 order_status_choices = (
     ("ORD", "Order Received"),
     ("OFD", "Out For Delivery"),
