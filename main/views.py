@@ -19,7 +19,9 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.utils import timezone
 from .forms import CheckOutForm, CouponForm, RefundForm
-from .Paytm.paytm_checksum import generate_checksum, verify_checksum
+
+from .utils import paytm_gateway
+from .Paytm.paytm_checksum import verify_checksum
 from django.views.decorators.csrf import csrf_exempt
 import stripe
 
@@ -251,29 +253,10 @@ class CheckOut(View):
                 if payment_choice == "S":
                     return redirect("main:payment", payment_option="stripe")
                 elif payment_choice == "P":
-                    amount = order.get_final_amount()
-                    order_id = str(order.id) + "_" + order.ref_code
-                    merchant_key = settings.PAYTM_SECRET_KEY
-                    params = (
-                        ("MID", settings.PAYTM_MERCHANT_ID),
-                        ("ORDER_ID", str(order_id)),
-                        ("CUST_ID", str(self.request.user.username)),
-                        ("TXN_AMOUNT", str(amount)),
-                        ("CHANNEL_ID", settings.PAYTM_CHANNEL_ID),
-                        ("WEBSITE", settings.PAYTM_WEBSITE),
-                        ("INDUSTRY_TYPE_ID", settings.PAYTM_INDUSTRY_TYPE_ID),
-                        ("CALLBACK_URL", "http://127.0.0.1:8000/payment_confirmation/"),
-                    )
-                    paytm_params = dict(params)
-                    checksum = generate_checksum(paytm_params, merchant_key)
-                    payment = PaymentViaPaytm.objects.create(
-                        user=self.request.user,
-                        order_id=order_id,
-                        amount=amount,
-                        checksum=checksum,
+                    paytm_params = paytm_gateway(
+                        order_id=order.id, user_id=self.request.user.id
                     )
 
-                    paytm_params["CHECKSUMHASH"] = checksum
                     return render(self.request, "redirect.html", context=paytm_params)
             else:
                 messages.error(self.request, "Enter valid address")
@@ -317,7 +300,7 @@ def PaytmCallback(request):
                 order.ordered = True
                 order.save()
             except ObjectDoesNotExist:
-                message.warning(request, "Order Not Found")
+                messages.warning(request, "Order Not Found")
         return render(request, "callback_response.html", context=received_data)
 
 

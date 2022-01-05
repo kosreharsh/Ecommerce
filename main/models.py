@@ -204,6 +204,30 @@ def order_status_handler(sender, instance, created, **kwargs):
         )
 
 
+class PaytmParams:
+    def __init__(
+        self,
+        MID,
+        ORDER_ID,
+        CUST_ID,
+        TXN_AMOUNT,
+        CHANNEL_ID,
+        WEBSITE,
+        INDUSTRY_TYPE_ID,
+        CALLBACK_URL,
+        CHECKSUMHASH,
+    ):
+        self.MID = MID
+        self.ORDER_ID = ORDER_ID
+        self.CUST_ID = CUST_ID
+        self.TXN_AMOUNT = TXN_AMOUNT
+        self.CHANNEL_ID = CHANNEL_ID
+        self.WEBSITE = WEBSITE
+        self.INDUSTRY_TYPE_ID = INDUSTRY_TYPE_ID
+        self.CALLBACK_URL = CALLBACK_URL
+        self.CHECKSUMHASH = CHECKSUMHASH
+
+
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:

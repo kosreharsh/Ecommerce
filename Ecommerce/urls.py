@@ -27,6 +27,7 @@ from main.api.views import (
     CurrentCartViewSet,
     AddressViewSet,
     registration,
+    get_paytm_creditionals,
 )
 
 router = routers.DefaultRouter()
@@ -44,6 +45,7 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
     path("api-token-auth/", views.obtain_auth_token),
     path("signUp/", registration, name="signUp"),
+    path("get_paytm_creditionals/", get_paytm_creditionals, name="paytm-creditionals"),
 ]
 
 if config("DEBUG"):

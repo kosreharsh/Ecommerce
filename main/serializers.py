@@ -1,9 +1,21 @@
 from rest_framework import serializers
-from .models import Item, Order, Address, OrderItem
+from .models import Item, Order, Address, OrderItem, PaytmParams
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 
 User = get_user_model()
+
+
+class PaytmParamsSerializer(serializers.Serializer):
+    MID = serializers.CharField()
+    ORDER_ID = serializers.CharField()
+    CUST_ID = serializers.CharField()
+    TXN_AMOUNT = serializers.CharField()
+    CHANNEL_ID = serializers.CharField()
+    WEBSITE = serializers.CharField()
+    INDUSTRY_TYPE_ID = serializers.CharField()
+    CALLBACK_URL = serializers.URLField()
+    CHECKSUMHASH = serializers.CharField()
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -33,15 +45,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         username = validated_data["username"]
         email = validated_data["email"]
         password = validated_data["password"]
-        # password2 = validated_data["password2"]
-        # if User.objects.filter(email=email).exists():
-        #     raise serializers.ValidationError(
-        #         {"email": "Email Address should be unique"}
-        #     )
-        # if password != password2:
-        #     raise serializers.ValidationError(
-        #         {"password": "Password does not match."}
-        #     )
         user = User.objects.create(username=username, email=email)
         user.set_password(password)
         user.save()
@@ -107,6 +110,7 @@ class MyOrderSerializer(serializers.ModelSerializer):
     shipping_address = AddressSerializer(read_only=True)
     user = serializers.StringRelatedField()
     items = OrderItemSerializer(many=True, read_only=True)
+    total_amount = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
@@ -114,11 +118,15 @@ class MyOrderSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "ref_code",
+            "total_amount",
             "items",
             "ordered",
             "ordered_date",
             "shipping_address",
-            "coupon",
+            # "coupon",
             "payment",
             "payment_via_paytm",
         ]
+
+    def get_total_amount(self, obj):
+        return obj.get_final_amount()
